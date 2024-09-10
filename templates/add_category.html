@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{% static 'main.css' %}">
+  <title>Document</title>
+</head>
+<body>
+  <div class="container mt-5">
+    <h1>Add a New Book</h1>
+    <form method="POST" style="display: flex; flex-direction: column;">
+      {% csrf_token %}
+      
+      <div class="mb-3">
+        <label for="Category" class="form-label">Category</label>
+        <input type="text" class="form-control" id="Category" name="name" required>
+      </div>
+      <button type="submit" class="btn btn-primary mt-3">add</button>
+    </form>
+    <h2>Existed</h2>
+    {% for categorie in categories %}
+    <table class="table table-striped">
+      <tr>
+        <td>{{ categorie.name }}</td>
+      </tr>
+    </table>
+    {% endfor %}
+  </div>
+</body>
+</html>

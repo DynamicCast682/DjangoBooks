@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'main.css' %}">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+
+  <title>Books</title>
+</head>
+
+<body>
+  <div class="innerBody">
+    <div class="container mt-5">
+      <div class="addActions">
+        <a href="add_book" class="btn btn-primary">Add Book</a>
+        <a href="add_category" class="btn btn-primary">Add Category</a>
+      </div>
+      <h1>Books</h1>
+      <div class="SortAndFind">
+        <form method="GET">
+          <div class="Sort">
+            <span>Sort by:</span>
+            <select name="sort_by" class="form-select">
+
+              <option {% if sort_by == 'title' %}selected{% endif %} value="title">Title</option>
+              <option {% if sort_by == 'author' %}selected{% endif %} value="author">Author</option>
+            </select>
+
+          </div>
+          <div class="Find">
+            <input type="text" name="search" class="form-control" placeholder="Search">
+          </div>
+          <button type="submit" class="btn btn-primary">Find</button>
+        </form>
+
+        
+      </div>
+
+      {% for category in category_books %}
+      <h2 class="mt-5">{{ category.name }}</h2>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Author</th>
+          </tr>
+        </thead>
+        <tbody>
+
+
+          {% for book in category.books %}
+          <tr>
+
+            <td>{{ book.title }}</td>
+            <td>{{ book.author }}</td>
+            <td><a href="delete_book?book_id={{ book.id }}" class="btn btn-primary">
+                Delete
+              </a></td>
+            <td><a href="edit_book?book_id={{ book.id }}"></a></td>
+          </tr>
+          {% endfor %}
+
+        </tbody>
+      </table>
+      {% endfor %}
+    </div>
+    <div class="PageSwith">
+      <a href="?page={{ page_obj.lpn }}" class="btn btn-primary">Previous</a>
+      <a href="?page={{ page_obj.rpn }}" class="btn btn-primary">Next</a>
+    </div>
+    <!-- <div class="InfoPart">
+      {% for category in categories %}
+      <div class="Category">
+        <div class="CategoryName"></div>
+        <div class="CategoryBooks">
+          {% for book in category.books %}
+          <div class="Book">
+            <div class="BookSvg"></div>
+            <div class="BookInfo">
+              <div class="BookTitle">{{ book.title }}</div>
+              <div class="BookAuthor">{{ book.author }}</div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div> -->
+
+  </div>
+
+</body>
+
+</html>
