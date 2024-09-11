@@ -19,7 +19,7 @@ from django.shortcuts import redirect
 from django.urls import path, include, reverse
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path('books/', include('App.urls')),
-    path("", lambda req: redirect('books/'), name='redirect_to_main_page'),
+  path("admin/", admin.site.urls),
+  path('books/', include('App.urls')),
+  path("", lambda req: redirect('books/'), name='redirect_to_main_page'),
 ]
