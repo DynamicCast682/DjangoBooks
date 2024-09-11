@@ -6,30 +6,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="{% static 'main.css' %}">
-  <title>Document</title>
+  <title>Edit</title>
 </head>
 <body>
   <div class="container mt-5">
-    <h1>Add a New Book</h1>
+    <h1>Edit Book</h1>
     <form method="POST" style="display: flex; flex-direction: column;">
       {% csrf_token %}
       <div class="mb-3">
         <label for="title" class="form-label">Title</label>
-        <input type="text" class="form-control" id="title" name="title">
+        <input type="text" class="form-control" id="title" name="title" value="{{ book.title }}">
       </div>
       <div class="mb-3">
         <label for="author" class="form-label">Author</label>
-        <input type="text" class="form-control" id="author" name="author" >
+        <input type="text" class="form-control" id="author" name="author" value="{{ book.author }}" >
       </div>
       <div class="mb-3">
         <label for="category" class="form-label">Category</label>
         <select class="form-select" id="category" name="category" required>
           {% for category in categories %}
-          <option value="{{ category.name }}">{{ category.name }}</option>
+          <option {% if book.category.name == category.name %}selected{% endif %} value="{{ category.name }}">{{ category.name }}</option>
           {% endfor %}
         </select>
       </div>
-      <button type="submit" class="btn btn-primary mt-3">Submit</button>
+      <input type="hidden" name="book_id" value="{{ book.id }}">
+      <button type="submit" class="btn btn-primary mt-3">Edit</button>
     </form>
   </div>
 </body>

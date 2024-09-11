@@ -20,7 +20,6 @@ from django.urls import path, include, reverse
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-
-    path('books/', include('App.urls'), name='main_page'),
+    path('books/', include('App.urls')),
     path("", lambda req: redirect('books/'), name='redirect_to_main_page'),
 ]

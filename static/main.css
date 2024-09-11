@@ -46,3 +46,18 @@ body {
 th, td, tr, h2, h1, span {
   color: white ;
 }
+.PageSwith {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+.PageSwith > span {
+  width: 40px;
+  height: 40px;
+  border-radius: 5px;
+  background-color: #646464;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,3 +1,5 @@
+from functools import lru_cache
+
 import numpy as np
 import pandas as pd
 
@@ -29,7 +31,7 @@ def get_filtered_books(category, search):
   return list(filter(lambda x: search.lower() in x.title.lower() or search.lower() in x.author.lower(), books))
 
 
-def get_categories_and_books(page: int, sort_by: str, search: str):
+def get_categories_and_books(page: int, sort_by: str, search: str) -> list[dict]:
   columns = ['name', 'title', 'author', 'id']
   category_books = [
     [
@@ -42,11 +44,21 @@ def get_categories_and_books(page: int, sort_by: str, search: str):
   ]
   category_books = [pd.DataFrame(cb, columns=columns) for cb in category_books]
   category_books = pd.concat(category_books)
-  filter_mask = category_books['title'].str.contains(search, case=False) | category_books['author'].str.contains(search,
-                                                                                                                 case=False)
-  category_books = category_books[filter_mask]
-  gbd = category_books.groupby('name')
-  category_books = gbd.apply(lambda x: x.sort_values(by=sort_by)).reset_index(drop=True)
-  print(category_books)
+  filter_mask = category_books['title'].str.contains(search, case=False)
+  filter_mask |= category_books['author'].str.contains(search, case=False)
+  filter_mask |= category_books['name'].str.contains(search, case=False)
 
-  # Paginator(context['category_books'], 10).get_page(page)
+  category_books = category_books[filter_mask]
+  category_books = category_books.sort_values(by=sort_by).reset_index(drop=True)
+  step = 10
+  category_books = category_books.iloc[step * (page - 1):step * page]
+  # gbd = category_books.groupby('name')
+  # result = []
+  # for gb in gbd.groups:
+  #   name = gb
+  #   group = gbd.get_group(gb).sort_values(by=sort_by)
+  #   result.append({
+  #     'name': name,
+  #     'books': group[['title', 'author', 'id']].to_dict(orient='records')
+  #   })
+  return category_books.to_dict(orient='records')

@@ -17,6 +17,7 @@
     <div class="container mt-5">
       <div class="addActions">
         <a href="add_book" class="btn btn-primary">Add Book</a>
+        <a href="random_fill" class="btn btn-primary">Random Fill (Delete all)</a>
         <a href="add_category" class="btn btn-primary">Add Category</a>
       </div>
       <h1>Books</h1>
@@ -40,37 +41,41 @@
         
       </div>
 
-      {% for category in category_books %}
-      <h2 class="mt-5">{{ category.name }}</h2>
       <table class="table table-striped">
         <thead>
           <tr>
+            <th>Category</th>
             <th>Title</th>
             <th>Author</th>
+            <th>Delete</th>
+            <th>Edit</th>
           </tr>
         </thead>
         <tbody>
 
 
-          {% for book in category.books %}
+          {% for book in category_books %}
           <tr>
-
+            <td>{{ book.name }}</td>
             <td>{{ book.title }}</td>
             <td>{{ book.author }}</td>
             <td><a href="delete_book?book_id={{ book.id }}" class="btn btn-primary">
                 Delete
               </a></td>
-            <td><a href="edit_book?book_id={{ book.id }}"></a></td>
+            <td><a href="edit_book?book_id={{ book.id }}"  class="btn btn-primary">
+              Edit
+            </a></td>
           </tr>
           {% endfor %}
 
         </tbody>
       </table>
-      {% endfor %}
     </div>
+
     <div class="PageSwith">
-      <a href="?page={{ page_obj.lpn }}" class="btn btn-primary">Previous</a>
-      <a href="?page={{ page_obj.rpn }}" class="btn btn-primary">Next</a>
+      <a href="?page={{ lpn }}" class="btn btn-primary">Previous</a>
+      <span>{{ page }}</span>
+      <a href="?page={{ rpn }}" class="btn btn-primary">Next</a>
     </div>
     <!-- <div class="InfoPart">
       {% for category in categories %}
