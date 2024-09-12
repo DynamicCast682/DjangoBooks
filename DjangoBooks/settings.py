@@ -74,15 +74,15 @@ WSGI_APPLICATION = "DjangoBooks.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 POSTGRESQL_HOST = os.environ.get('POSTGRESQL_HOST', 'localhost')
-
+print({'HOST': os.getenv('POSTGRESQL_HOST', 'localhost')})
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'postgresql_pass',
-        'HOST': POSTGRESQL_HOST,
-        'PORT': '5432',
+        'NAME': os.getenv('POSTGRES_DB', 'postgres'),
+        'USER': os.getenv('POSTGRES_USER', 'postgres'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'postgresql_pass'),
+        'HOST': os.getenv('POSTGRESQL_HOST', 'localhost'),
+        'PORT': os.getenv('POSTGRES_PORT', '5432'),
     }
 }
 
