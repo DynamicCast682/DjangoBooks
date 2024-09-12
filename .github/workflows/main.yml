@@ -22,7 +22,7 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: test_db
+          POSTGRES_DB: postgres
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
