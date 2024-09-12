@@ -27,15 +27,18 @@ jobs:
     - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
     # set POSTGRESQL_HOST env
-    - name: Set env
-      run: export POSTGRESQL_HOST=postgres
+    
       uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Set env
+      run: |
+        export POSTGRESQL_HOST=postgres
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+    
     - name: Run Tests
       run: |
         python manage.py test
