@@ -16,7 +16,7 @@ jobs:
         python-version: [3.11.5]
     services:
       postgres:
-        image: postgres:13
+        image: postgres:latest
         ports:
           - 5432:5432
         env:
@@ -26,6 +26,9 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
+    # set POSTGRESQL_HOST env
+    - name: Set env
+      run: export POSTGRESQL_HOST=postgres
       uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
