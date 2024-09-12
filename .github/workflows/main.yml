@@ -33,7 +33,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Set env
       run: |
-        export POSTGRESQL_HOST=postgres
+        echo "POSTGRESQL_HOST=postgres" >> $GITHUB_ENV
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
