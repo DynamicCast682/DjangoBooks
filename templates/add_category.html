@@ -23,9 +23,19 @@
     <h2>Existed</h2>
     {% for categorie in categories %}
     <table class="table table-striped">
-      <tr>
-        <td>{{ categorie.name }}</td>
-      </tr>
+      <tbody>
+        <tr>
+          <td>{{ categorie.name }}</td>
+          <td><a href="/books/edit_category?category_id={{ categorie.id }}" class="btn btn-primary">
+            Edit
+          </a>
+            
+          </a></td>
+          <td><a href="" class="btn btn-primary">
+            Delete
+          </a></td>
+        </tr>
+      </tbody>
     </table>
     {% endfor %}
   </div>

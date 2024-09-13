@@ -26,14 +26,14 @@
           <div class="Sort">
             <span>Sort by:</span>
             <select name="sort_by" class="form-select">
-
-              <option {% if sort_by == 'title' %}selected{% endif %} value="title">Title</option>
-              <option {% if sort_by == 'author' %}selected{% endif %} value="author">Author</option>
+              {% for sort_now in sort_by_list %}
+              <option {% if sort_by == sort_now %}selected{% endif %} value="{{ sort_now }}">{{ sort_now }}</option>
+              {% endfor %}
             </select>
 
           </div>
           <div class="Find">
-            <input type="text" name="search" class="form-control" placeholder="Search">
+            <input type="text" name="search" class="form-control" placeholder="Search" value="{{ search }}">
           </div>
           <button type="submit" class="btn btn-primary">Find</button>
         </form>
@@ -44,9 +44,11 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th>Category</th>
             <th>Title</th>
             <th>Author</th>
+            <th>Category</th>
+            <th>Date Added</th>
+            <th>Date Updated</th>
             <th>Delete</th>
             <th>Edit</th>
           </tr>
@@ -56,9 +58,11 @@
 
           {% for book in category_books %}
           <tr>
-            <td>{{ book.name }}</td>
             <td>{{ book.title }}</td>
             <td>{{ book.author }}</td>
+            <td>{{ book.category }}</td>
+            <td>{{ book.date_added }}</td>
+            <td>{{ book.date_updated }}</td>
             <td><a href="delete_book?book_id={{ book.id }}" class="btn btn-primary">
                 Delete
               </a></td>
@@ -73,9 +77,9 @@
     </div>
 
     <div class="PageSwith">
-      <a href="?page={{ lpn }}" class="btn btn-primary">Previous</a>
+      <a href="?page={{ lpn }}&search={{ search }}&sort_by={{ sort_by }}" class="btn btn-primary">Previous</a>
       <span>{{ page }}</span>
-      <a href="?page={{ rpn }}" class="btn btn-primary">Next</a>
+      <a href="?page={{ rpn }}&search={{ search }}&sort_by={{ sort_by }}" class="btn btn-primary">Next</a>
     </div>
     <!-- <div class="InfoPart">
       {% for category in categories %}
