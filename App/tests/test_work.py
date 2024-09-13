@@ -1,5 +1,6 @@
 import json
 import os.path
+import socket
 import time
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
@@ -29,6 +30,11 @@ else:
 
 
 class TestBooks(StaticLiveServerTestCase):
+  @classmethod
+  def setUpClass(cls):
+    cls.host = socket.gethostbyname(socket.gethostname())
+    super(TestBooks, cls).setUpClass()
+
   def setUp(self):
     work.books2ORM()
 
@@ -56,7 +62,7 @@ class TestBooks(StaticLiveServerTestCase):
       books_element[0].find_elements(By.CSS_SELECTOR, 'td > a')[0].click()
       self.assertNotIn(key, self.__get_books_keys())
 
-      # python manage.py test App.tests.test_work.TestBooks.test_delete_books
+      # python manage.py test App.tests.test_work.TestBooks.test_delete_books --liveserver=0.0.0.0:8081
 
   books_edit_count = 4
 
