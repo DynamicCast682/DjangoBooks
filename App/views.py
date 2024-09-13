@@ -13,7 +13,6 @@ from App.work import get_categories_and_books, books2ORM
 # Create your views here.
 
 
-
 def test(request):
   return render(request, 'test.html')
 
@@ -41,91 +40,85 @@ def index(request):
   return render(request, 'index.html', context=context)
 
 
-def add_book(request):
-  if request.method == 'POST':
-    context = {
-      "title": request.POST['title'],
-      "author": request.POST['author'],
-      "category": Category.objects.get(name=request.POST['category'])
-    }
-    # print(context)
-    form = BookForm(context)
-    if form.is_valid():
-      form.save()
-      return redirect('/books/')
-  else:
-    form = BookForm()
-  return render(request, 'add_book.html', {
-    'form': form,
-    'categories': Category.objects.all()
-  })
+class BookActions:
+  @classmethod
+  def add(cls, request):
+    if request.method == 'POST':
+      form = BookForm(request.POST)
+      if form.is_valid():
+        form.save()
+        return redirect('/books/')
+    else:
+      form = BookForm()
+    return render(request, 'add_book.html', {
+      'form': form,
+      'categories': Category.objects.all()
+    })
+
+  @classmethod
+  def edit(cls, request):
+    if request.method == 'POST':
+      book = Book.objects.get(id=request.POST['book_id'])
+      form = BookForm(request.POST, instance=book)
+      if form.is_valid():
+        form.save()
+        return redirect('/books/')
+    else:
+      book = Book.objects.get(id=request.GET['book_id'])
+      form = BookForm(instance=book)
+    return render(request, 'edit_book.html', {
+      'form': form,
+      'book': book,
+      'categories': Category.objects.all()
+    })
+
+  @classmethod
+  def delete(cls, request):
+    if request.method == 'GET':
+      book = Book.objects.get(id=request.GET['book_id'])
+      book.delete()
+    return redirect('/books/')
 
 
-def delete_book(request):
-  if request.method == 'GET':
-    book = Book.objects.get(id=request.GET['book_id'])
-    book.delete()
-  return redirect('/books/')
+class CategoryActions:
 
+  @classmethod
+  def add(cls, request):
+    if request.method == 'POST':
+      form = CategoryForm(request.POST)
+      if form.is_valid():
+        form.save()
+        return redirect('/books/')
+    else:
+      form = CategoryForm()
+    return render(request, 'add_category.html', {
+      'form': form,
+      'categories': Category.objects.all()
+    })
 
-def edit_book(request):
+  @classmethod
+  def edit(cls, request):
+    if request.method == 'POST':
+      category = Category.objects.get(id=request.POST['category_id'])
+      form = CategoryForm(request.POST, instance=category)
+      if form.is_valid():
+        form.save()
+        return redirect('/books/add_category/')
+    else:
+      category = Category.objects.get(id=request.GET['category_id'])
+      form = CategoryForm(instance=category)
+    return render(request, 'edit_category.html', {
+      'form': form,
+      'category': category,
+      'categories': Category.objects.all()
+    })
 
-  if request.method == 'POST':
-    book = Book.objects.get(id=request.POST['book_id'])
-    right_context = {
-      "title": request.POST['title'],
-      "author": request.POST['author'],
-      "category": Category.objects.get(name=request.POST['category'])
-    }
-    form = BookForm(right_context, instance=book)
-    if form.is_valid():
-      form.save()
-      return redirect('/books/')
-  else:
-    book = Book.objects.get(id=request.GET['book_id'])
-    form = BookForm(instance=book)
-  return render(request, 'edit_book.html', {
-    'form': form,
-    'book': book,
-    'categories': Category.objects.all()
-  })
-
-
-def add_category(request):
-  if request.method == 'POST':
-    form = CategoryForm(request.POST)
-    if form.is_valid():
-      form.save()
-      return redirect('/books/')
-  else:
-    form = CategoryForm()
-  return render(request, 'add_category.html', {
-    'form': form,
-    'categories': Category.objects.all()
-  })
-
-
-def delete_category(request):
-  if request.method == 'GET':
-    category = Category.objects.get(id=request.GET['category_id'])
-    category.delete()
-  return redirect('/books/')
-
-def edit_category(request):
-  if request.method == 'POST':
-    category = Category.objects.get(id=request.POST['category_id'])
-    form = CategoryForm(request.POST, instance=category)
-    if form.is_valid():
-      form.save()
-      return redirect('/books/add_category/')
-  else:
-    category = Category.objects.get(id=request.GET['category_id'])
-    form = CategoryForm(instance=category)
-  return render(request, 'edit_category.html', {
-    'form': form,
-    'category': category,
-    'categories': Category.objects.all()
-  })
+  @classmethod
+  def delete(cls, request):
+    if request.method == 'GET':
+      category = Category.objects.get(id=request.GET['category_id'])
+      category.delete()
+    return redirect('/books/add_category/')
 
 
 def random_fill(request):

@@ -32,6 +32,7 @@ def get_example_books() -> list[dict]:
 def books2ORM():
   array = []
   for book in get_example_books():
+    book = book.copy()
     book['category'] = Category.objects.get_or_create(name=book['category'])[0]
     array.append(Book(**book))
   Book.objects.bulk_create(array)
