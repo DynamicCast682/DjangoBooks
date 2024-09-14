@@ -1,7 +1,9 @@
 import json
 import os.path
+import random
 import socket
 import time
+import uuid
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
@@ -38,6 +40,7 @@ class TestBooks(StaticLiveServerTestCase):
   def setUp(self):
     work.books2ORM()
 
+
   def main_page(self):
     # driver.get('http://localhost:8000')
     driver.get(self.live_server_url)
@@ -57,9 +60,9 @@ class TestBooks(StaticLiveServerTestCase):
     self.main_page()
 
     for _ in range(1, 4):
-      books_element = driver.find_elements(By.CSS_SELECTOR, 'tbody > tr')
-      key = books_element[0].text
-      books_element[0].find_elements(By.CSS_SELECTOR, 'td > a')[0].click()
+      books_elements = driver.find_elements(By.CSS_SELECTOR, 'tbody > tr')
+      key = books_elements[0].text
+      books_elements[0].find_elements(By.CSS_SELECTOR, 'td > a')[0].click()
       self.assertNotIn(key, self.__get_books_keys())
 
       # python manage.py test App.tests.test_work.TestBooks.test_delete_books --liveserver=0.0.0.0:8081
@@ -69,7 +72,48 @@ class TestBooks(StaticLiveServerTestCase):
   def test_edit_books(self):
     self.main_page()
     for i in range(1, 4):
-      ...
+      books_elements = driver.find_elements(By.CSS_SELECTOR, 'tbody > tr')
+      books_elements[0].find_elements(By.CSS_SELECTOR, 'td > a')[1].click()
+      time.sleep(0.5)
+      title_element = driver.find_element(By.ID, 'title')
+      old_title = title_element.get_attribute('value')
+      title_element.clear()
+      new_title = f'{uuid.uuid4()}'
+      title_element.send_keys(new_title)
+
+      author_element = driver.find_element(By.ID, 'author')
+      old_author = author_element.get_attribute('value')
+      author_element.clear()
+      new_author = f'{uuid.uuid4()}'
+      author_element.send_keys(new_author)
+
+      category_element = driver.find_element(By.ID, 'category')
+      category_options = category_element.find_elements(By.TAG_NAME, 'option')
+      ca_l = category_options.__len__()
+      old_category = category_options[0].text
+      for option in category_options:
+        if option.get_attribute('selected') is not None:
+          old_category = option.text
+          break
+      random_category = random.randint(0, ca_l - 1)
+      new_category = category_options[random_category].text
+      category_element.click()
+      category_options[random_category].click()
+
+
+      submit_button = driver.find_element(By.CSS_SELECTOR, 'button[type="submit"]')
+      submit_button.click()
+      time.sleep(1)
+
+      # key = f'{new_title} {new_author} {new_category}'
+      new_in_db = Book.objects.filter(title=new_title, author=new_author,
+                                      category=Category.objects.get(name=new_category)).first()
+      old_in_db = Book.objects.filter(title=old_title, author=old_author,
+                                      category=Category.objects.get(name=old_category)).first()
+      self.assertIsNotNone(new_in_db)
+      self.assertIsNone(old_in_db)
+
+    # python manage.py test App.tests.test_work.TestBooks.test_edit_books
 
 
 class TestWork(StaticLiveServerTestCase):

@@ -25,7 +25,7 @@
         <label for="category" class="form-label">Category</label>
         <select class="form-select" id="category" name="category" required>
           {% for category in categories %}
-          <option {% if book.category.name == category.name %}selected{% endif %} value="{{ category.name }}">{{ category.name }}</option>
+          <option value="{{ category.name }}" {% if book.category.name == category.name %}selected{% endif %}>{{ category.name }}</option>
           {% endfor %}
         </select>
       </div>
