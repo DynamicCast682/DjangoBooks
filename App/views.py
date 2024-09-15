@@ -88,7 +88,7 @@ class CategoryActions:
       form = CategoryForm(request.POST)
       if form.is_valid():
         form.save()
-        return redirect('/books/')
+        return redirect('/books/add_category/')
     else:
       form = CategoryForm()
     return render(request, 'add_category.html', {
@@ -115,8 +115,8 @@ class CategoryActions:
 
   @classmethod
   def delete(cls, request):
-    if request.method == 'GET':
-      category = Category.objects.get(id=request.GET['category_id'])
+    if request.method == 'POST':
+      category = Category.objects.get(id=request.POST['category_id'])
       category.delete()
     return redirect('/books/add_category/')
 

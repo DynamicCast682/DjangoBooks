@@ -21,23 +21,36 @@
       <button type="submit" class="btn btn-primary mt-3">add</button>
     </form>
     <h2>Existed</h2>
-    {% for categorie in categories %}
+    
     <table class="table table-striped">
-      <tbody>
+      <thead>
         <tr>
-          <td>{{ categorie.name }}</td>
-          <td><a href="/books/edit_category?category_id={{ categorie.id }}" class="btn btn-primary">
+          <th>Category</th>
+          <th>Edit</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for category in categories %}
+        <tr>
+          <td>{{ category.name }}</td>
+          <td><a href="/books/edit_category?category_id={{ category.id }}" class="btn btn-primary">
             Edit
           </a>
             
           </a></td>
-          <td><a href="" class="btn btn-primary">
-            Delete
-          </a></td>
+          <td>
+            <form method="POST" action="/books/delete_category">
+              {% csrf_token %}
+              <input type="submit" value="Delete" class="btn btn-primary">
+              <input type="hidden" name="category_id" value="{{ category.id }}">
+            </form>
+          </td>
         </tr>
+        {% endfor %}
       </tbody>
     </table>
-    {% endfor %}
+    
   </div>
 </body>
 </html>
